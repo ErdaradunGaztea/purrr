@@ -28,7 +28,7 @@ every <- function(.x, .p, ...) {
   for (i in seq_along(.x)) {
     val <- val && .p(.x[[i]], ...)
 
-    if (is_false(val)) {
+    if (.Call(is_false_impl, value = val)) {
       return(FALSE)
     }
   }
