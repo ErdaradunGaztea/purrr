@@ -5,8 +5,35 @@
 
 #include "conditions.h"
 
-bool test_bool_out(SEXP value) {
+static bool is_bool(SEXP value);
+static bool is_na(SEXP value);
+SEXP every_impl(SEXP env, SEXP ffi_n, SEXP ffi_i);
+
+static bool is_bool(SEXP value) {
   return TYPEOF(value) == LGLSXP && Rf_length(value) == 1 && LOGICAL(value)[0] != NA_LOGICAL;
+}
+
+static bool is_na(SEXP value) {
+  // NULL is not NA
+  if (value == R_NilValue) return false;
+
+  switch (TYPEOF(value)) {
+  case LGLSXP:
+    return LENGTH(value) == 1 && (LOGICAL(value)[0] == NA_LOGICAL);
+  case INTSXP:
+    return LENGTH(value) == 1 && (INTEGER(value)[0] == NA_INTEGER);
+  case REALSXP:
+    return LENGTH(value) == 1 && ISNA(REAL(value)[0]);
+  case CPLXSXP:
+    if (LENGTH(value) != 1) return false;
+    Rcomplex c = COMPLEX(value)[0];
+    return ISNA(c.r) || ISNA(c.i);
+  case STRSXP:
+    return LENGTH(value) == 1 &&  (STRING_ELT(value, 0) == NA_STRING);
+  default:
+    // Other types cannot be NA
+    return false;
+  }
 }
 
 SEXP every_impl(SEXP env, SEXP ffi_n, SEXP ffi_i) {
@@ -34,10 +61,15 @@ SEXP every_impl(SEXP env, SEXP ffi_n, SEXP ffi_i) {
 
     SEXP res = PROTECT(R_forceAndCall(call, 1, env));
 
-    if (!test_bool_out(res)) {
+    if (is_na(res)) {
+      *p_out = NA_LOGICAL;
+      UNPROTECT(1);
+      continue;
+    }
+
+    if (!is_bool(res)) {
       r_abort(
-        "%s must be a numeric vector, character vector, or function, not %s.",
-        "{.arg {error_arg}}",
+        "`.p()` must return a single `TRUE` or `FALSE`, not %s.",
         rlang_obj_type_friendly_full(res, true, false)
       );
     }
@@ -48,9 +80,6 @@ SEXP every_impl(SEXP env, SEXP ffi_n, SEXP ffi_i) {
     if (res_value == FALSE) {
       *p_out = FALSE;
       break;
-    }
-    if (res_value == NA_LOGICAL) {
-      *p_out = NA_LOGICAL;
     }
   }
 
