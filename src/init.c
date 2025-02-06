@@ -22,16 +22,16 @@ extern SEXP vflatten_impl(SEXP, SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
   CLEANCALL_METHOD_RECORD,
-  {"coerce_impl",           (DL_FUNC) &coerce_impl,          2},
-  {"pluck_impl",            (DL_FUNC) &pluck_impl,           4},
-  {"flatten_impl",          (DL_FUNC) &flatten_impl,         1},
-  {"every_impl",            (DL_FUNC) &every_impl,           3},
-  {"map_impl",              (DL_FUNC) &map_impl,             6},
-  {"map2_impl",             (DL_FUNC) &map2_impl,            6},
-  {"pmap_impl",             (DL_FUNC) &pmap_impl,            8},
-  {"transpose_impl",        (DL_FUNC) &transpose_impl,       2},
-  {"vflatten_impl",         (DL_FUNC) &vflatten_impl,        2},
-  {"purrr_eval",            (DL_FUNC) &Rf_eval,              2},
+  {"coerce_impl",           (DL_FUNC) &coerce_impl,    2},
+  {"pluck_impl",            (DL_FUNC) &pluck_impl,     4},
+  {"flatten_impl",          (DL_FUNC) &flatten_impl,   1},
+  {"every_impl",            (DL_FUNC) &every_impl,     3},
+  {"map_impl",              (DL_FUNC) &map_impl,       6},
+  {"map2_impl",             (DL_FUNC) &map2_impl,      6},
+  {"pmap_impl",             (DL_FUNC) &pmap_impl,      8},
+  {"transpose_impl",        (DL_FUNC) &transpose_impl, 2},
+  {"vflatten_impl",         (DL_FUNC) &vflatten_impl,  2},
+  {"purrr_eval",            (DL_FUNC) &Rf_eval,        2},
   {NULL, NULL, 0}
 };
 

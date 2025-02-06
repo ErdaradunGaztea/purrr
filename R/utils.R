@@ -71,9 +71,7 @@ as_predicate <- function(.fn,
   function(...) {
     out <- .fn(...)
 
-    test_result <- .Call(test_bool_out_impl, value = out)
-
-    if (!test_result) {
+    if (!is_bool(out)) {
       if (is_na(out) && .allow_na) {
         # Always return a logical NA
         return(NA)
