@@ -19,8 +19,6 @@ extern SEXP map2_impl(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP pmap_impl(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP transpose_impl(SEXP, SEXP);
 extern SEXP vflatten_impl(SEXP, SEXP);
-extern SEXP test_bool_out_impl(SEXP);
-extern SEXP is_false_impl(SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
   CLEANCALL_METHOD_RECORD,
@@ -33,8 +31,6 @@ static const R_CallMethodDef CallEntries[] = {
   {"pmap_impl",             (DL_FUNC) &pmap_impl,            8},
   {"transpose_impl",        (DL_FUNC) &transpose_impl,       2},
   {"vflatten_impl",         (DL_FUNC) &vflatten_impl,        2},
-  {"test_bool_out_impl",    (DL_FUNC) &test_bool_out_impl,   1},
-  {"is_false_impl",         (DL_FUNC) &is_false_impl,        1},
   {"purrr_eval",            (DL_FUNC) &Rf_eval,              2},
   {NULL, NULL, 0}
 };
